@@ -51,3 +51,8 @@ body {
   box-shadow: 0 0 20px white;
   background-color: grey;
 }
+
+.presseed {
+  box-shadow: 0 3px 4px 0 #DBEDF3;
+  opacity: 0.5;
+}
