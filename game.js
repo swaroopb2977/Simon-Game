@@ -2,6 +2,7 @@
 var buttonColors=["red","blue","green","yellow"];
 
 var gamePattern=[];
+var userClickedPattern=[];
 
 function nextSequence()
 {
@@ -63,6 +64,53 @@ function nextSequence()
 
   });
 
+  function playsound(soundname)
+  {
+    var audio=new Audio("sounds/"+soundname+".mp3");
+    audio.play();
+  }
+/*
+  function animatePress(currentColor)
+  {
+    document.getElementById(currentColor).classList("pressed");
+ //   $(currentColor).addClass("pressed");
+
+    setTimeout(function(){
+        $("#" + currentColor).removeClass("pressed");
+  }, 100);
+
+  }
+
+*/
+function animatePress(currentColor) {
+
+    //2. Use jQuery to add this pressed class to the button that gets clicked inside animatePress().
+ //   $("#" + currentColor).addClass("pressed");
+ document.getElementById(currentColor).classList.add("pressed");
+  
+    //3. use Google/Stackoverflow to figure out how you can use Javascript to remove the pressed class after a 100 milliseconds.
+    setTimeout(function () {
+      $("#" + currentColor).removeClass("pressed");
+    }, 100);
+  }
+
+
+
+   $(".btn").click(function(){
+
+    var userChosenColour=this.id;
+    userClickedPattern.push(userChosenColour);
+    animatePress(userChosenColour);
+    /*var Animated=this.id;
+    $("#"+Animated).fadeIn(100).fadeOut(100).fadeIn(100);*/
+    playsound(userChosenColour);
+    console.log(userClickedPattern);
+
+   });
+
+
+
+
   //  return randomNumber;
 
 
@@ -71,6 +119,13 @@ function nextSequence()
 
 /*
 $(randomChosenColour).fadeOut();
+
+    var userChosenColour=this.id;
+    userClickedPattern.push(userChosenColour);
+    console.log(userClickedPattern);
+
+
+
 /*
 $(document).click(function()
 {
