@@ -3,23 +3,38 @@ var buttonColors=["red","blue","green","yellow"];
 
 var gamePattern=[];
 var userClickedPattern=[];
+var label=0;
+
+
+$(document).keydown(function(event){
+
+  if(event.key==='a'|| event.key==='A')
+    {
+        
+        $("h1").text("Level "+label);
+        nextSequence();
+    }
+
+});
 
 function nextSequence()
 {
+    label=label+1;
+    $("h1").text("Level "+label);
     var n=Math.random();
     n=(n*4);
     n=Math.floor(n);
     var randomNumber=n;
 
     var randomChosenColour=buttonColors[n];
-    console.log(randomChosenColour);
+   
     gamePattern.push(randomChosenColour);
 
-    return randomChosenColour;
+    
 
-}
+/*
 
- document.getElementById(nextSequence()).addEventListener("click",function(){
+ document.getElementById(randomChosenColour).addEventListener("click",function(){
 
     var color=this.className;
     var Animated=this.id;
@@ -63,32 +78,21 @@ function nextSequence()
     }
 
   });
+  */
+}
 
   function playsound(soundname)
   {
     var audio=new Audio("sounds/"+soundname+".mp3");
     audio.play();
   }
-/*
-  function animatePress(currentColor)
-  {
-    document.getElementById(currentColor).classList("pressed");
- //   $(currentColor).addClass("pressed");
 
-    setTimeout(function(){
-        $("#" + currentColor).removeClass("pressed");
-  }, 100);
-
-  }
-
-*/
 function animatePress(currentColor) {
 
-    //2. Use jQuery to add this pressed class to the button that gets clicked inside animatePress().
- //   $("#" + currentColor).addClass("pressed");
+    
  document.getElementById(currentColor).classList.add("pressed");
   
-    //3. use Google/Stackoverflow to figure out how you can use Javascript to remove the pressed class after a 100 milliseconds.
+    //3.  Javascript to remove the pressed class after a 100 milliseconds.
     setTimeout(function () {
       $("#" + currentColor).removeClass("pressed");
     }, 100);
@@ -101,13 +105,57 @@ function animatePress(currentColor) {
     var userChosenColour=this.id;
     userClickedPattern.push(userChosenColour);
     animatePress(userChosenColour);
-    /*var Animated=this.id;
-    $("#"+Animated).fadeIn(100).fadeOut(100).fadeIn(100);*/
+    
     playsound(userChosenColour);
     console.log(userClickedPattern);
 
+    checkAnswer(userClickedPattern.length-1);
+
    });
 
+
+function checkanswer(currentlevel){
+
+
+  if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+
+    console.log("success");
+
+    //4. If the user got the most recent answer right in step 3, then check that they have finished their sequence with another if statement.
+    if (userClickedPattern.length === gamePattern.length){
+
+      //5. Call nextSequence() after a 1000 millisecond delay.
+      setTimeout(function () {
+        nextSequence();
+      }, 1000);
+
+    }
+
+  } else {
+
+    console.log("wrong");
+
+  }
+
+
+}
+
+
+function nextSequence() {
+
+  //6. Once nextSequence() is triggered, reset the userClickedPattern to an empty array ready for the next level.
+  userClickedPattern = [];
+
+  level++;
+  $("h1").text("Level " + level);
+
+  var randomNumber = Math.floor(Math.random() * 4);
+  var randomChosenColour = buttonColours[randomNumber];
+  gamePattern.push(randomChosenColour);
+
+  $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
+  playSound(randomChosenColour);
+}
 
 
 
