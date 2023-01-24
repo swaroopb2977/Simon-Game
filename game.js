@@ -1,19 +1,20 @@
+/*
 
 var buttonColors=["red","blue","green","yellow"];
 
 var gamePattern=[];
 var userClickedPattern=[];
 var label=0;
+var started = false;
 
 
 $(document).keydown(function(event){
 
-  if(event.key==='a'|| event.key==='A')
-    {
-        
-        $("h1").text("Level "+label);
-        nextSequence();
-    }
+  if (!started) {
+    $("h1").text("Level " + level);
+    nextSequence();
+    started = true;
+  }
 
 });
 
@@ -32,53 +33,7 @@ function nextSequence()
 
     
 
-/*
 
- document.getElementById(randomChosenColour).addEventListener("click",function(){
-
-    var color=this.className;
-    var Animated=this.id;
-   
-    $("#"+Animated).fadeIn(100).fadeOut(100).fadeIn(100);
-      
-
-    switch(color)
-    {
-        case  "btn green":
-
-        var a1=new Audio("sounds/green.mp3");
-        a1.play();
-        break;
-
-        case "btn blue":
-
-        var a2=new Audio("sounds/blue.mp3");
-        a2.play();
-        break;
-
-        case "btn red":
-
-        var a3=new Audio("sounds/red.mp3");
-        a3.play();
-        break;
-
-
-        case "btn yellow":
-
-        var a4=new Audio("sounds/yellow.mp3");
-        a4.play();
-        break;
-
-        default:
-
-        var a5=new Audio("sounds/wrong.mp3");
-        a5.play();
-        break;
-
-    }
-
-  });
-  */
 }
 
   function playsound(soundname)
@@ -134,6 +89,16 @@ function checkanswer(currentlevel){
   } else {
 
     console.log("wrong");
+    playSound("wrong");
+
+      //2. In the styles.css file, there is a class called "game-over", apply this class to the body of the website when the user gets one of the answers wrong and then remove it after 200 milliseconds.
+      $("body").addClass("game-over");
+      setTimeout(function () {
+        $("body").removeClass("game-over");
+      }, 200);
+
+      //3. Change the h1 title to say "Game Over, Press Any Key to Restart" if the user got the answer wrong.
+      $("h1").text("Game Over, Press Any Key to Restart");
 
   }
 
@@ -157,7 +122,16 @@ function nextSequence() {
   playSound(randomChosenColour);
 }
 
+function startOver() {
 
+  //3. Inside this function, you'll need to reset the values of level, gamePattern and started variables.
+  level = 0;
+  gamePattern = [];
+  started = false;
+}
+
+
+*/
 
   //  return randomNumber;
 
@@ -180,3 +154,99 @@ $(document).click(function()
     var audio
 });*/
 
+
+
+
+var buttonColours = ["red", "blue", "green", "yellow"];
+
+var gamePattern = [];
+var userClickedPattern = [];
+
+var started = false;
+var level = 0;
+
+$(document).keypress(function() {
+  if (!started) {
+    $("#level-title").text("Level " + level);
+    nextSequence();
+    started = true;
+  }
+});
+
+$(".btn").click(function() {
+
+  var userChosenColour = $(this).attr("id");
+  userClickedPattern.push(userChosenColour);
+
+  playSound(userChosenColour);
+  animatePress(userChosenColour);
+
+  checkAnswer(userClickedPattern.length-1);
+});
+
+
+function checkAnswer(currentLevel) {
+
+    if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+
+      console.log("success");
+
+      if (userClickedPattern.length === gamePattern.length){
+        setTimeout(function () {
+          nextSequence();
+        }, 1000);
+      }
+
+    } else {
+
+      console.log("wrong");
+
+      playSound("wrong");
+
+      $("body").addClass("game-over");
+      setTimeout(function () {
+        $("body").removeClass("game-over");
+      }, 200);
+
+      $("#level-title").text("Game Over, Press Any Key to Restart");
+
+      //2. Call startOver() if the user gets the sequence wrong.
+      startOver();
+    }
+
+}
+
+function nextSequence() {
+
+  userClickedPattern = [];
+  level++;
+  $("#level-title").text("Level " + level);
+
+  var randomNumber = Math.floor(Math.random() * 4);
+  var randomChosenColour = buttonColours[randomNumber];
+  gamePattern.push(randomChosenColour);
+
+  $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
+  playSound(randomChosenColour);
+}
+
+function playSound(name) {
+  var audio = new Audio("sounds/" + name + ".mp3");
+  audio.play();
+}
+
+function animatePress(currentColor) {
+  $("#" + currentColor).addClass("pressed");
+  setTimeout(function () {
+    $("#" + currentColor).removeClass("pressed");
+  }, 100);
+}
+
+//1. Create a new function called startOver().
+function startOver() {
+
+  //3. Inside this function, you'll need to reset the values of level, gamePattern and started variables.
+  level = 0;
+  gamePattern = [];
+  started = false;
+}
